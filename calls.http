@@ -1,4 +1,4 @@
-@token = {{$processEnv [%]TEAMSNAP_CURRENT_TOKEN}}
+@token = {{$processEnv TEAMSNAP_CURRENT_TOKEN}}
 
 ### Get Teams
 GET https://apiv3.teamsnap.com/teams/search?user_id=6442181
