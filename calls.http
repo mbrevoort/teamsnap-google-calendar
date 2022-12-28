@@ -1,0 +1,34 @@
+@token = {{$processEnv [%]TEAMSNAP_CURRENT_TOKEN}}
+
+### Get Teams
+GET https://apiv3.teamsnap.com/teams/search?user_id=6442181
+content-type: application/json
+authorization: Bearer {{token}}
+
+
+### This one works! see collection/items
+GET https://apiv3.teamsnap.com/members/search?user_id=6442181
+content-type: application/json
+authorization: Bearer {{token}}
+
+### Highlands Ranch Basketball
+
+GET https://apiv3.teamsnap.com/v3/teams/7808210
+content-type: application/json
+authorization: Bearer {{token}}
+
+### Events for the highlands ranch team Basketball
+
+GET https://apiv3.teamsnap.com/v3/events/search?team_id=7808210
+content-type: application/json
+authorization: Bearer {{token}}
+
+### Get a specific location by id
+GET https://apiv3.teamsnap.com/v3/locations/59704234
+content-type: application/json
+authorization: Bearer {{token}}
+
+### Get locations by team id
+GET https://apiv3.teamsnap.com/v3/locations/search?team_id=7808210
+content-type: application/json
+authorization: Bearer {{token}}
