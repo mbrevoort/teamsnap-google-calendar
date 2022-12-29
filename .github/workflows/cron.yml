@@ -22,5 +22,7 @@ jobs:
           CALENDAR_ID: ${{ secrets.CALENDAR_ID }}
           GOOGLE_SERVICE_ACCOUNT_CREDS: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDS }}
           GOOGLE_OAUTH_CREDS: ${{ secrets.GOOGLE_OAUTH_CREDS }}
+          TEAMSNAP_CLIENT_ID: ${{ secrets.TEAMSNAP_CLIENT_ID }}
+          TEAMSNAP_CLIENT_SECRET: ${{ secrets.TEAMSNAP_CLIENT_SECRET }}
         run: |
           npm run sync-events
