@@ -6,6 +6,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@google-cloud/datastore": "^7.0.0",
+    "@google-cloud/local-auth": "^2.1.0",
+    "google-auth-library": "^8.7.0",
+    "googleapis": "^105.0.0",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"

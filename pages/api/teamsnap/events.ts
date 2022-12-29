@@ -1,18 +1,85 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getClient } from '../../../lib/google_oauth';
+import { setEvent, getEvent } from '../../../lib/store';
+const {google} = require('googleapis');
+
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
 
+  const oAuth2Client = await getClient();  
+  const calendar = google.calendar({version: 'v3', auth: oAuth2Client});
+  const CALENDAR_ID = "brevoort.com_ql48cvqpjp493dh9pjd3522k8o@group.calendar.google.com";
+
+
   // Hardcoded as I'm hacking away at this
   const teamMap = {};
-  teamMap["Basketball"] = await getGameSummaries("7808210");
-  teamMap["HRHS Lacrosse"] = await getGameSummaries("7966304");
-  
+  teamMap["Basketball"] = (await getGameSummaries("7808210")).filter(it => it.label == "Varsity");;
+  teamMap["HRHS Lacrosse"] = await getGameSummaries("7966304")
+  const allEvents = teamMap["Basketball"].concat( teamMap["HRHS Lacrosse"])
+
+  let updated = 0;
+  let created = 0;
+  // for each game, 
+  for (const event of allEvents) {
+    //   check if an event exists
+    let record = await getEvent(event.id)
+    if (record) {
+      console.log(`FOUND ${event.id}`)
+      let calEvent = record.calendar;
+
+      let result = await calendar.events.update({
+        eventId: calEvent.id,
+        calendarId: CALENDAR_ID,
+        resource: makeCalendarEvent(event)
+      })
+      updated++;
+
+      await setEvent(event.id, {
+        teamsnap: event,
+        calendar: result.data
+      })
+
+
+    } else {
+      let calEvent = makeCalendarEvent(event);
+      let result = await calendar.events.insert({
+        calendarId: CALENDAR_ID,
+        resource: calEvent
+      })
+      created++;
+
+      await setEvent(event.id, {
+        teamsnap: event,
+        calendar: result.data
+      })
+    }
+  }
+
   response.status(200).json({
-    games: teamMap,
+    updated,
+    created,
   });
+}
+
+function makeCalendarEvent(teamsnapEvent) {
+  let startDate = new Date(Date.parse(teamsnapEvent.start_date));
+  let endDate = new Date(startDate.getTime() + teamsnapEvent.duration_in_minutes*60000);
+  console.log(startDate, endDate)
+  let calEvent = {
+    summary: teamsnapEvent.name,
+    location: teamsnapEvent.location?.address,
+    start: {
+      dateTime: startDate,
+    },
+    end: {
+      dateTime: endDate
+    },
+    colorId: 7,
+  }
+  return calEvent;
 }
 
 
