@@ -7,13 +7,15 @@ jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '19'
       - name: npm install
         run: |
           npm install .
+      - name: print env
+        run: |
+          env
       - name: Call to update events
         env:
           CALENDAR_ID: ${{ secrets.CALENDAR_ID }}
