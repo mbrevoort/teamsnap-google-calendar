@@ -14,6 +14,7 @@ jobs:
       - name: npm install
         run: |
           npm install .
+      - run: env
       - name: Call to update events
         run: |
           npm run sync-events
