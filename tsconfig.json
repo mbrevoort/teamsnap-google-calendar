@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "lib/store.js"  ],
+, "lib/store.ts"  ],
   "exclude": [
     "node_modules"
   ]
