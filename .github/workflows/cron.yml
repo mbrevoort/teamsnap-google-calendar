@@ -11,9 +11,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '19'
-      - name: Info
+      - name: npm install
         run: |
-          pwd && ls
+          npm install .
       - name: Call to update events
         run: |
           npm run sync-events
