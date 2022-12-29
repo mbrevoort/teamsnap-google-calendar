@@ -2,7 +2,6 @@ import {OAuth2Client} from 'google-auth-library';
 import {getToken} from './store';
 
 export async function getClient() {
-  console.log('creds', JSON.parse(process.env.GOOGLE_OAUTH_CREDS))
   const keys = JSON.parse(process.env.GOOGLE_OAUTH_CREDS);
   const oAuth2Client = new OAuth2Client(
     keys.web.client_id,

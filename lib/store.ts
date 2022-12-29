@@ -4,6 +4,7 @@ const TOKEN_KIND = "Token";
 const EVENT_KIND = "Event";
 
 function getDatastore() {
+    console.log(JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_CREDS));
     const creds = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_CREDS);
     const datastore = new Datastore({
         credentials: creds,
