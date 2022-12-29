@@ -7,6 +7,9 @@ jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '19'
       - name: Call to update events
         working-directory: /home/runner/work/teamsnap-google-calendar
         run: |
