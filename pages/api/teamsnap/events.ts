@@ -2,38 +2,50 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getClient } from '../../../lib/google_oauth';
 import { setEvent, getEvent } from '../../../lib/store';
 const {google} = require('googleapis');
-
+const AUTH_TOKEN = process.env.AUTH_TOKEN;
+const CALENDAR_ID = process.env.CALENDAR_ID;
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
+  if (AUTH_TOKEN && `Bearer ${AUTH_TOKEN}` != request.headers.authorization) {
+    response.status(401).json({ error: "unauthorized" });
+    console.log("AUTH_TOKEN does not match", AUTH_TOKEN, request.headers.authorization)
+    return
+  }
+  const isForceUpdate = request.query.force && true;
 
   const oAuth2Client = await getClient();  
   const calendar = google.calendar({version: 'v3', auth: oAuth2Client});
-  const CALENDAR_ID = "brevoort.com_ql48cvqpjp493dh9pjd3522k8o@group.calendar.google.com";
-
-
-  // Hardcoded as I'm hacking away at this
-  const teamMap = {};
-  teamMap["Basketball"] = (await getGameSummaries("7808210")).filter(it => it.label == "Varsity");;
-  teamMap["HRHS Lacrosse"] = await getGameSummaries("7966304")
-  const allEvents = teamMap["Basketball"].concat( teamMap["HRHS Lacrosse"])
+  
+  // Basketball
+  let allEvents = (await getGameSummaries("7808210")).filter(it => it.label == "Varsity");;
+  // Lacrosse
+  allEvents = allEvents.concat(await getGameSummaries("7966304"))
 
   let updated = 0;
   let created = 0;
+  let unchanged = 0;
   // for each game, 
   for (const event of allEvents) {
+    const updatedCalendarEvent = makeCalendarEvent(event)
+
     //   check if an event exists
     let record = await getEvent(event.id)
     if (record) {
-      console.log(`FOUND ${event.id}`)
       let calEvent = record.calendar;
+      console.log(`FOUND ${event.id}`)
+      if (!isForceUpdate && !hasEventChanged(calEvent, updatedCalendarEvent)) {
+        console.log(`Not changed: ${event.id}, ${calEvent.id}`);
+        unchanged++;
+        continue;
+      }
 
       let result = await calendar.events.update({
         eventId: calEvent.id,
         calendarId: CALENDAR_ID,
-        resource: makeCalendarEvent(event)
+        resource: updatedCalendarEvent
       })
       updated++;
 
@@ -41,13 +53,10 @@ export default async function handler(
         teamsnap: event,
         calendar: result.data
       })
-
-
     } else {
-      let calEvent = makeCalendarEvent(event);
       let result = await calendar.events.insert({
         calendarId: CALENDAR_ID,
-        resource: calEvent
+        resource: updatedCalendarEvent
       })
       created++;
 
@@ -61,6 +70,7 @@ export default async function handler(
   response.status(200).json({
     updated,
     created,
+    unchanged,
   });
 }
 
@@ -77,9 +87,18 @@ function makeCalendarEvent(teamsnapEvent) {
     end: {
       dateTime: endDate
     },
-    colorId: 7,
+    colorId: '9',
   }
   return calEvent;
+}
+
+function hasEventChanged(existing, current) {
+  if (existing.summary != current.summary) return true;
+  if (existing.location != current.location) return true;
+  if (Date.parse(existing.start?.dateTime) != Date.parse(current.start?.dateTime)) return true;
+  if (Date.parse(existing.end?.dateTime) != Date.parse(current.end?.dateTime)) return true;
+  if (existing.colorId != current.colorId) return true;
+  return false;
 }
 
 
