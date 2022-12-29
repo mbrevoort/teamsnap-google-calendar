@@ -1,5 +1,5 @@
 import { getClient } from '..//lib/google_oauth';
-import { setEvent, getEvent, getToken } from '../lib/store';
+import { setEvent, getEvent, deleteEvent, getToken } from '../lib/store';
 const {google} = require('googleapis');
 const AUTH_TOKEN = process.env.AUTH_TOKEN;
 const CALENDAR_ID = process.env.CALENDAR_ID;
@@ -31,6 +31,10 @@ async function main() {
         console.log(`Not changed: ${event.id}, ${calEvent.id}`);
         unchanged++;
         continue;
+      }
+
+      if (event.is_canceled) {
+        updatedCalendarEvent.summary = `CANCELLED: ${updatedCalendarEvent.summary}`;
       }
 
       let result = await calendar.events.update({
@@ -79,6 +83,7 @@ function makeCalendarEvent(teamsnapEvent) {
       dateTime: endDate
     },
     colorId: '9',
+    description: `${teamsnapEvent.label}\n${teamsnapEvent.location?.name}\n${teamsnapEvent.location?.address}\nhttps://go.teamsnap.com/${teamsnapEvent.team_id}/schedule/view_game/${teamsnapEvent.id}`
   }
   return calEvent;
 }
@@ -140,8 +145,10 @@ async function getGameSummaries(teamId) {
 
   // create game summaries
   let summaries = games.map(it => {
+    console.log(it);
     return {
       id: getValue(it, "id"),
+      team_id: getValue(it, "team_id"),
       name: getValue(it, "formatted_title_for_multi_team"),
       label: getValue(it, "label"),
       location: locationsMap[getValue(it, "location_id")],
@@ -149,6 +156,7 @@ async function getGameSummaries(teamId) {
       duration_in_minutes: getValue(it, "duration_in_minutes"),
       is_canceled: getValue(it, "is_canceled"),
       updated_at: getValue(it, "updated_at"),
+      href: it.href,
     }
   })
 

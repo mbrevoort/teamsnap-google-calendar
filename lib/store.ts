@@ -44,3 +44,9 @@ export async function getEvent(teamsnapEventId) {
     const key = datastore.key([EVENT_KIND, teamsnapEventId])
     return (await datastore.get(key))[0];
 }
+
+export async function deleteEvent(teamsnapEventId) {
+    const datastore = getDatastore();
+    const key = datastore.key([EVENT_KIND, teamsnapEventId])
+    await datastore.delete(key);
+}
