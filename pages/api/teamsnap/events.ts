@@ -9,6 +9,7 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
+  console.log(process.env);
   if (AUTH_TOKEN && `Bearer ${AUTH_TOKEN}` != request.headers.authorization) {
     response.status(401).json({ error: "unauthorized" });
     console.log("AUTH_TOKEN does not match", AUTH_TOKEN, request.headers.authorization)

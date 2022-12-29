@@ -32,3 +32,9 @@ authorization: Bearer {{token}}
 GET https://apiv3.teamsnap.com/v3/locations/search?team_id=7808210
 content-type: application/json
 authorization: Bearer {{token}}
+
+### Get locations by team id
+GET https://teamsnap-google-calendar.vercel.app/api/teamsnap/events
+content-type: application/json
+authorization: Bearer {{$processEnv AUTH_TOKEN}}
+
