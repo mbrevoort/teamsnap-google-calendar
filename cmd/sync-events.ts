@@ -1,21 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getClient } from '../../../lib/google_oauth';
-import { setEvent, getEvent } from '../../../lib/store';
+import { getClient } from '..//lib/google_oauth';
+import { setEvent, getEvent, getToken } from '../lib/store';
 const {google} = require('googleapis');
 const AUTH_TOKEN = process.env.AUTH_TOKEN;
 const CALENDAR_ID = process.env.CALENDAR_ID;
 
-export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse,
-) {
-  console.log(process.env);
-  if (AUTH_TOKEN && `Bearer ${AUTH_TOKEN}` != request.headers.authorization) {
-    response.status(401).json({ error: "unauthorized" });
-    console.log("AUTH_TOKEN does not match", AUTH_TOKEN, request.headers.authorization)
-    return
-  }
-  const isForceUpdate = request.query.force && true;
+async function main() {
+  const isForceUpdate = true; //process.arrequest.query.force && true;
 
   const oAuth2Client = await getClient();  
   const calendar = google.calendar({version: 'v3', auth: oAuth2Client});
@@ -68,7 +58,7 @@ export default async function handler(
     }
   }
 
-  response.status(200).json({
+  console.log({
     updated,
     created,
     unchanged,
@@ -112,7 +102,7 @@ function getValue(collection, name) {
 }
 
 async function getTeamsnap(url){
-  const token = process.env.TEAMSNAP_CURRENT_TOKEN;
+  const token = (await getToken("teamsnap"))?.access_token;
   let resp = await fetch(url, {
     method: "GET",
     headers: {
@@ -164,3 +154,5 @@ async function getGameSummaries(teamId) {
 
   return summaries;
 }
+
+main();

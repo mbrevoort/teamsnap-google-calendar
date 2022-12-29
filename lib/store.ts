@@ -8,12 +8,13 @@ function getDatastore() {
     const datastore = new Datastore({
         credentials: creds,
         projectId: creds.project_id,
-    });    
+    });
+    return datastore;
 }
 
-module.exports.setToken = async function (val) {
+export async function setToken(name, val) {
     const datastore = getDatastore();
-    const key = datastore.key([TOKEN_KIND, "token"])
+    const key = datastore.key([TOKEN_KIND, name])
     const token = {
         key: key,
         data: val
@@ -21,14 +22,14 @@ module.exports.setToken = async function (val) {
     await datastore.save(token);
 }
 
-module.exports.getToken = async function () {
+export async function getToken(name) {
     const datastore = getDatastore();
-    const tokenKey = datastore.key([TOKEN_KIND, "token"])
+    const tokenKey = datastore.key([TOKEN_KIND, name])
     return (await datastore.get(tokenKey))[0];
 }
 
 
-module.exports.setEvent = async function (teamsnapEventId, val) {
+export async function setEvent(teamsnapEventId, val) {
     const datastore = getDatastore();
     const key = datastore.key([EVENT_KIND, teamsnapEventId])
     const event = {
@@ -38,7 +39,7 @@ module.exports.setEvent = async function (teamsnapEventId, val) {
     await datastore.save(event);
 }
 
-module.exports.getEvent = async function (teamsnapEventId) {
+export async function getEvent(teamsnapEventId) {
     const datastore = getDatastore();
     const key = datastore.key([EVENT_KIND, teamsnapEventId])
     return (await datastore.get(key))[0];

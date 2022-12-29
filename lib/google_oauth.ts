@@ -10,7 +10,7 @@ export async function getClient() {
   );
 
   try {
-    const token = await getToken();
+    const token = await getToken("google");
     oAuth2Client.setCredentials(token);  
   } catch(ex) {
     console.log(ex);

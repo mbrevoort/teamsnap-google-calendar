@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+const store = require('../../../lib/store');
 
 export default async function handler(
   request: NextApiRequest,
@@ -39,6 +40,7 @@ export default async function handler(
 
   let jsonBody = await resp.json();
   let accessToken = jsonBody.access_token;
+  await store.setToken("teamsnap", jsonBody);
 
   response.status(200).json({
     accessToken,

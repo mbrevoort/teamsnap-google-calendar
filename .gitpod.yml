@@ -1,0 +1,4 @@
+tasks:
+  - before: echo 'install node' 
+    command: nvm install node
+

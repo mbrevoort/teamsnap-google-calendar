@@ -12,7 +12,7 @@ export default async function handler(
   let code = request.query.code as string;
   const r = await oAuth2Client.getToken(code);
   oAuth2Client.setCredentials(r.tokens);
-  await store.setToken(r.tokens);
+  await store.setToken("google", r.tokens);
 
   response.status(200).json({
     expiry: r.tokens.expiry_date
