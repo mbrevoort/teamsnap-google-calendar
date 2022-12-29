@@ -1,0 +1,13 @@
+name: hourly-cron
+on:
+  schedule:
+    - cron: '0 * * * *'
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call to update events
+        run: |
+          curl --request GET \
+          --url 'https://teamsnap-google-calendar.vercel.app/api/teamsnap/events' \
+          --header 'Authorization: Bearer ${{ secrets.AUTH_TOKEN }}'
