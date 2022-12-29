@@ -11,7 +11,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '19'
+      - name: Info
+        run: |
+          pwd && ls
       - name: Call to update events
-        working-directory: /home/runner/work/teamsnap-google-calendar
         run: |
           npm run sync-events
