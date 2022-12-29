@@ -8,6 +8,4 @@ jobs:
     steps:
       - name: Call to update events
         run: |
-          curl --request GET \
-          --url 'https://teamsnap-google-calendar.vercel.app/api/teamsnap/events' \
-          --header 'Authorization: Bearer ${{ secrets.AUTH_TOKEN }}'
+          npm run sync-events
