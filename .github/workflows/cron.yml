@@ -7,5 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call to update events
+        working-directory: /home/runner/work/teamsnap-google-calendar
         run: |
           npm run sync-events
