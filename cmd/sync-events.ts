@@ -11,7 +11,7 @@ async function main() {
   const calendar = google.calendar({version: 'v3', auth: oAuth2Client});
   
   // Basketball
-  let allEvents = (await getGameSummaries("7808210")).filter(it => it.label == "Varsity");;
+  let allEvents = (await getGameSummaries("7808210")).filter(it => it.label.startsWith("Varsity"));
   // Lacrosse
   allEvents = allEvents.concat(await getGameSummaries("7966304"))
 
