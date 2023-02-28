@@ -89,7 +89,7 @@ function makeCalendarEvent(teamsnapEvent) {
     end: {
       dateTime: endDate
     },
-    colorId: '9',
+    colorId: teamsnapEvent.is_game ? '9' : '4',
     description: `${teamsnapEvent.label}\n${teamsnapEvent.location?.name}\n${teamsnapEvent.location?.address}\nhttps://go.teamsnap.com/${teamsnapEvent.team_id}/schedule/view_game/${teamsnapEvent.id}`
   }
   return calEvent;
@@ -149,7 +149,6 @@ async function getGameSummaries(teamId) {
 
   // create game summaries
   let summaries = events.map(it => {
-    console.log(it);
     return {
       id: getValue(it, "id"),
       team_id: getValue(it, "team_id"),
