@@ -11,7 +11,10 @@ async function main() {
   const calendar = google.calendar({version: 'v3', auth: oAuth2Client});
   
   // Basketball
-  let allEvents = (await getGameSummaries("7808210")).filter(it => it.label.startsWith("Varsity"));
+  let allEvents = (await getGameSummaries("7808210"))
+    .filter(it => it.is_game)
+    .filter(it => it.label.startsWith("Varsity"));
+    
   // Lacrosse
   allEvents = allEvents.concat(await getGameSummaries("7966304"))
 
@@ -137,14 +140,11 @@ async function getGameSummaries(teamId) {
     return map;
   });
 
-  // filter games
-  let games = filterBy(events, "is_game", true);
-
   // filter only games in the future
-  games = games.filter(it => Date.parse(it.data.find(item => item.name == "start_date")?.value) > Date.now());
+  events = events.filter(it => Date.parse(it.data.find(item => item.name == "start_date")?.value) > Date.now());
 
   // create game summaries
-  let summaries = games.map(it => {
+  let summaries = events.map(it => {
     console.log(it);
     return {
       id: getValue(it, "id"),
@@ -155,6 +155,7 @@ async function getGameSummaries(teamId) {
       start_date: getValue(it, "start_date"),
       duration_in_minutes: getValue(it, "duration_in_minutes"),
       is_canceled: getValue(it, "is_canceled"),
+      is_game: getValue(it, "is_game"),
       updated_at: getValue(it, "updated_at"),
       href: it.href,
     }
