@@ -14,9 +14,13 @@ async function main() {
   let allEvents = (await getGameSummaries("7808210"))
     .filter(it => it.is_game)
     .filter(it => it.label.startsWith("Varsity"));
-    
-  // Lacrosse
-  allEvents = allEvents.concat(await getGameSummaries("7966304"))
+
+  // Lacrosse HR
+  allEvents = allEvents.concat(await getGameSummaries("7966304"));
+  // Lacrosse Coyotes
+  allEvents = allEvents.concat(await getGameSummaries("8218269"));
+
+  
 
   let updated = 0;
   let created = 0;
