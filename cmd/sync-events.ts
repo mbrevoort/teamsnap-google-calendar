@@ -19,9 +19,10 @@ async function main() {
   allEvents = allEvents.concat(await getGameSummaries("7966304"));
   // Lacrosse Coyotes
   allEvents = allEvents.concat(await getGameSummaries("8218269"));
+  // Lacrosse Urban Elite 
+  allEvents = allEvents.concat(await getGameSummaries("8269626"));
 
   
-
   let updated = 0;
   let created = 0;
   let unchanged = 0;
