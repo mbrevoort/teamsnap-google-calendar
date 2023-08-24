@@ -11,12 +11,12 @@ async function main() {
   const calendar = google.calendar({version: 'v3', auth: oAuth2Client});
   
   // Basketball
-  let allEvents = (await getGameSummaries("7808210"))
-    .filter(it => it.is_game)
-    .filter(it => it.label.startsWith("Varsity"));
+  // let allEvents = (await getGameSummaries("7808210"))
+  //   .filter(it => it.is_game)
+  //   .filter(it => it.label.startsWith("Varsity"));
 
   // Lacrosse HR
-  allEvents = allEvents.concat(await getGameSummaries("7966304"));
+  let allEvents = await getGameSummaries("7966304");
   // Lacrosse Coyotes
   allEvents = allEvents.concat(await getGameSummaries("8218269"));
   // Lacrosse Urban Elite 
@@ -133,6 +133,10 @@ async function getTeamsnap(url){
 async function getGameSummaries(teamId) {
   let events = await getTeamsnap(`https://apiv3.teamsnap.com/v3/events/search?team_id=${teamId}`);
   let locations = await getTeamsnap(`https://apiv3.teamsnap.com/v3/locations/search?team_id=${teamId}`);
+
+  if (!events || !locations) {
+    return []
+  }
 
   let locationsMap =  locations.reduce((map, obj) => {
     let id = getValue(obj, "id");
