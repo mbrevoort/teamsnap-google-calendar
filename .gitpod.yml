@@ -1,4 +1,6 @@
 tasks:
   - before: echo 'install node' 
     command: nvm install node
+  - init: npm install . && npm run build
+    
 
