@@ -145,7 +145,7 @@ async function getGameSummaries(teamId) {
   let events = await getTeamsnap(`https://apiv3.teamsnap.com/v3/events/search?team_id=${teamId}`);
   let locations = await getTeamsnap(`https://apiv3.teamsnap.com/v3/locations/search?team_id=${teamId}`);
 
-  if (!events || !locations) {
+  if (!events || !locations || locations.length == 0) {
     return []
   }
 
