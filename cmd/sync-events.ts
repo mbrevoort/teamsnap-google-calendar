@@ -15,15 +15,14 @@ async function main() {
   //   .filter(it => it.is_game)
   //   .filter(it => it.label.startsWith("Varsity"));
 
-  // Lacrosse HR
-  let allEvents = await getGameSummaries("7966304");
   // Lacrosse Coyotes
-  allEvents = allEvents.concat(await getGameSummaries("8218269"));
+  let allEvents = allEvents.concat(await getGameSummaries("8218269"));
   // Lacrosse Urban Elite 
   allEvents = allEvents.concat(await getGameSummaries("8269626"));
   // Lacrosse Urban Elite goalie training
   allEvents = allEvents.concat(await getGameSummaries("8896791"));
-
+  // Lacrosse Iz. Coyotes
+  allEvents = allEvents.concat(await getGameSummaries("9123878"));    
   
   let updated = 0;
   let created = 0;
