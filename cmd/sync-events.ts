@@ -23,6 +23,9 @@ async function main() {
   allEvents = allEvents.concat(await getGameSummaries("8896791"));
   // Lacrosse I&Z Training
   allEvents = allEvents.concat(await getGameSummaries("9123878"));    
+  // Iz Coyotes
+  allEvents = allEvents.concat(await getGameSummaries("8926894"));
+
   
   let updated = 0;
   let created = 0;
