@@ -166,7 +166,7 @@ async function getGameSummaries(teamId) {
   events = events.filter(it => Date.parse(it.data.find(item => item.name == "start_date")?.value) > Date.now());
 
   console.log("--- Events ---")
-  console.log(events)
+  console.log(JSON.stringify(events, null, 2))
   console.log("--- Locations ---")
   console.log(locationsMap)
 
