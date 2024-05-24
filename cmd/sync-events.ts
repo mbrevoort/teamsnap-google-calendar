@@ -165,11 +165,6 @@ async function getGameSummaries(teamId) {
   // filter only games in the future
   events = events.filter(it => Date.parse(it.data.find(item => item.name == "start_date")?.value) > Date.now());
 
-  console.log("--- Events ---")
-  console.log(JSON.stringify(events, null, 2))
-  console.log("--- Locations ---")
-  console.log(locationsMap)
-
   // create game summaries
   let summaries = events.map(it => {
     return {
@@ -178,6 +173,7 @@ async function getGameSummaries(teamId) {
       name: getValue(it, "formatted_title_for_multi_team"),
       label: getValue(it, "label"),
       location: locationsMap[getValue(it, "location_id")],
+      location_name: getValue(it, "location_name"),
       start_date: getValue(it, "start_date"),
       duration_in_minutes: getValue(it, "duration_in_minutes"),
       is_canceled: getValue(it, "is_canceled"),
@@ -186,6 +182,10 @@ async function getGameSummaries(teamId) {
       href: it.href,
     }
   })
+
+  console.log("--- Summaries ---")
+  console.log(JSON.stringify(summaries, null, 2))
+  console.log("-----------------")
 
   return summaries;
 }
