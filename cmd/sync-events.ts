@@ -88,10 +88,11 @@ function makeCalendarEvent(teamsnapEvent) {
 
   let startDate = new Date(Date.parse(teamsnapEvent.start_date));
   let endDate = new Date(startDate.getTime() + teamsnapEvent.duration_in_minutes*60000);
-  console.log(startDate, endDate)
+  
+  let locationName = teamsnapEvent.location?.name || teamsnapEvent.location_name;
   let calEvent = {
     summary: teamsnapEvent.name,
-    location: teamsnapEvent.location?.address,
+    location: teamsnapEvent.location?.address || locationName,
     start: {
       dateTime: startDate,
     },
@@ -101,7 +102,7 @@ function makeCalendarEvent(teamsnapEvent) {
     colorId: teamsnapEvent.is_game ? '9' : '4',
     description: valuesPerLine([
       teamsnapEvent.label, 
-      teamsnapEvent.location?.name, 
+      locationName,
       teamsnapEvent.location?.address, 
       `https://go.teamsnap.com/${teamsnapEvent.team_id}/schedule/view_game/${teamsnapEvent.id}`
     ])
