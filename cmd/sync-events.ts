@@ -103,7 +103,7 @@ function makeCalendarEvent(teamsnapEvent) {
       teamsnapEvent.label, 
       teamsnapEvent.location?.name, 
       teamsnapEvent.location?.address, 
-      "https://go.teamsnap.com/${teamsnapEvent.team_id}/schedule/view_game/${teamsnapEvent.id}"
+      `https://go.teamsnap.com/${teamsnapEvent.team_id}/schedule/view_game/${teamsnapEvent.id}`
     ])
   }
   return calEvent;
@@ -164,6 +164,11 @@ async function getGameSummaries(teamId) {
 
   // filter only games in the future
   events = events.filter(it => Date.parse(it.data.find(item => item.name == "start_date")?.value) > Date.now());
+
+  console.log("--- Events ---")
+  console.log(events)
+  console.log("--- Locations ---")
+  console.log(locationsMap)
 
   // create game summaries
   let summaries = events.map(it => {
