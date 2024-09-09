@@ -17,14 +17,10 @@ async function main() {
 
   // Lacrosse Coyotes
   let allEvents = (await getGameSummaries("8218269"));
-  // Lacrosse Urban Elite 
-  allEvents = allEvents.concat(await getGameSummaries("8269626"));
-  // Lacrosse Urban Elite goalie training
-  allEvents = allEvents.concat(await getGameSummaries("8896791"));
-  // Lacrosse I&Z Training
-  allEvents = allEvents.concat(await getGameSummaries("9123878"));    
   // Iz Coyotes
   allEvents = allEvents.concat(await getGameSummaries("8926894"));
+  // Iz Concept
+  allEvents = allEvents.concat(await getGameSummaries("9550068"));
 
   
   let updated = 0;
